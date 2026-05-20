@@ -13,22 +13,27 @@
       ansible.builtin.user:
         name: expense
         state: present
-
-    - name: Create a directory for the application # Create a directory for the application and set ownership to the 'expense' user
-      ansible.builtin.file:
-        path: /app
-        state: directory
-
-    - name: Download the application code using link # Download the application code from the specified URL and save it to the /app directory
-      ansible.builtin.get_url:
-        url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-        dest: /tmp/backend.zip
     
-    - name: Unzip the application code # Unzip the downloaded application code in the /app directory
-      ansible.builtin.unarchive:
-        src: /tmp/backend.zip
-        dest: /app
-        remote_src: yes
+    - name: include from common role # Include the common role to perform tasks that are common to both the backend and frontend, such as setting up directories and downloading application code
+      include_role:
+        name: common
+        tasks_from: main # Specify that the tasks to be included from the common role are in the main.yaml file
+        
+   # - name: Create a directory for the application # Create a directory for the application and set ownership to the 'expense' user
+    #   ansible.builtin.file:
+    #     path: /app
+    #     state: directory
+
+    # - name: Download the application code using link # Download the application code from the specified URL and save it to the /app directory
+    #   ansible.builtin.get_url:
+    #     url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+    #     dest: /tmp/backend.zip
+    
+    # - name: Unzip the application code # Unzip the downloaded application code in the /app directory
+    #   ansible.builtin.unarchive:
+    #     src: /tmp/backend.zip
+    #     dest: /app
+    #     remote_src: yes
 
     - name: Install application dependencies # Install the application dependencies using npm in the /app directory
       community.general.npm:

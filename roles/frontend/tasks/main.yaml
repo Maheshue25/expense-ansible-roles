@@ -9,35 +9,34 @@
         state: started
         enabled: yes
 
-    - name: remove default nginx config # Remove the default Nginx configuration file to avoid conflicts with the custom configuration for the frontend
-      ansible.builtin.file:
-        path: /usr/share/nginx/html
-        state: absent
+    - name: include from common role # Include the common role to perform tasks that are common to both the backend and frontend, such as setting up directories and downloading application code
+      include_role:
+        name: common
+        tasks_from: main # Specify that the tasks to be included from the common role are in the main.yaml file
 
-    - name: again create the html directory # Recreate the html directory after removing the default configuration to ensure it is available for the frontend code
-      ansible.builtin.file:
-        path: /usr/share/nginx/html
-        state: directory
+    # - name: remove default nginx config # Remove the default Nginx configuration file to avoid conflicts with the custom configuration for the frontend
+    #   ansible.builtin.file:
+    #     path: /usr/share/nginx/html
+    #     state: absent
 
-    - name: Download the frontend code using link # Download the frontend code from the specified URL and save it to the /usr/share/nginx/html directory
-      ansible.builtin.get_url:
-        url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
-        dest: /tmp/frontend.zip
+    # - name: again create the html directory # Recreate the html directory after removing the default configuration to ensure it is available for the frontend code
+    #   ansible.builtin.file:
+    #     path: /usr/share/nginx/html
+    #     state: directory
 
-    - name: Unzip the frontend code # Unzip the downloaded frontend code in the /usr/share/nginx/html directory
-      ansible.builtin.unarchive:
-        src: /tmp/frontend.zip
-        dest: /usr/share/nginx/html
-        remote_src: yes
+    # - name: Download the frontend code using link # Download the frontend code from the specified URL and save it to the /usr/share/nginx/html directory
+    #   ansible.builtin.get_url:
+    #     url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+    #     dest: /tmp/frontend.zip
+
+    # - name: Unzip the frontend code # Unzip the downloaded frontend code in the /usr/share/nginx/html directory
+    #   ansible.builtin.unarchive:
+    #     src: /tmp/frontend.zip
+    #     dest: /usr/share/nginx/html
+    #     remote_src: yes
 
     - name: setup new nginx config for the application (created new config already) # Create a new Nginx configuration file for the frontend to set up the reverse proxy
       ansible.builtin.template: # Will search for the expense.conf file in the templates directory of the role and copy it to the specified destination on the server
         src: expense.conf.j2
         dest: /etc/nginx/default.d/expense.conf
       notify: Restart nginx service # Notify the handler to restart the Nginx service after updating the configuration
-
-
-    - name: Restart nginx service # Restart the Nginx service to apply the new configuration
-      ansible.builtin.service:
-        name: nginx
-        state: restarted

@@ -5,7 +5,7 @@
 
 - name: Create a directory for the application # Create a directory for the application and set ownership to the 'expense' user
   ansible.builtin.file:
-    psath: "{{ APP_LOCATION }}" # for backend /app and for frontend /usr/share/nginx/html
+    path: "{{ APP_LOCATION }}" # for backend /app and for frontend /usr/share/nginx/html
     state: directory
 
 - name: Download the application code using link # Download the application code from the specified URL and save it to the appropriate directory

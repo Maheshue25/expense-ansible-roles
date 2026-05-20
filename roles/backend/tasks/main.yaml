@@ -1,7 +1,3 @@
-- name: Installing nodejs and npm
-  hosts: backend
-  become: yes
-  tasks:
     - name: 
       ansible.builtin.command: dnf module disable nodejs -y # Disable the Node.js module to avoid conflicts with the Node.js installation from the NodeSource repository
     

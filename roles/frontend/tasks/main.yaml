@@ -1,7 +1,3 @@
-- name: Install ngix server to Expense Project # Install and configure Nginx as a reverse proxy for the frontend 
-  hosts: frontend
-  become: yes
-  tasks:
     - name: Install nginx # Install the Nginx web server package
       ansible.builtin.package:
         name: nginx

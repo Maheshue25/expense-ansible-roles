@@ -18,7 +18,7 @@
       include_role:
         name: common
         tasks_from: main # Specify that the tasks to be included from the common role are in the main.yaml file
-        
+
    # - name: Create a directory for the application # Create a directory for the application and set ownership to the 'expense' user
     #   ansible.builtin.file:
     #     path: /app
@@ -77,7 +77,9 @@
       ansible.builtin.systemd:
         daemon_reload: yes
 
-    - name: restart the application service # Restart the application service to apply any changes and ensure it is running with the latest configuration
-      ansible.builtin.service:
+    - name: daemon reload and restart service # Restart the application service to apply any changes and ensure it is running with the latest configuration
+      ansible.builtin.systemd_service:
         name: backend
-        state: restarted       
+        state: restarted
+        enabled: true
+  

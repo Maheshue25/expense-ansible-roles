@@ -34,6 +34,8 @@
       ansible.builtin.template: # Will search for the expense.conf file in the templates directory of the role and copy it to the specified destination on the server
         src: expense.conf.j2
         dest: /etc/nginx/default.d/expense.conf
+      notify: Restart nginx service # Notify the handler to restart the Nginx service after updating the configuration
+
 
     - name: Restart nginx service # Restart the Nginx service to apply the new configuration
       ansible.builtin.service:

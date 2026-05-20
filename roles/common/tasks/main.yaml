@@ -10,6 +10,6 @@
 
 - name: Download the application code using link # Download the application code from the specified URL and save it to the appropriate directory
   ansible.builtin.unarchive:
-    url: "https://expense-builds.s3.us-east-1.amazonaws.com/expense-{{ COMPONENT }}-v2.zip" # Dynamically construct the URL for the application code based on the component (backend or frontend)
+    src: "https://expense-builds.s3.us-east-1.amazonaws.com/expense-{{ COMPONENT }}-v2.zip" # Dynamically construct the URL for the application code based on the component (backend or frontend)
     dest: "{{ APP_LOCATION }}" # for backend /app and for frontend /usr/share/nginx/html
     remote_src: yes

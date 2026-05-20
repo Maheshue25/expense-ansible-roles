@@ -1,15 +1,15 @@
 - name: remove existing directory for application # Remove the existing directory for the application to ensure a clean setup
   ansible.builtin.file:
-    path: {{ APP_LOCATION }} # for backend /app and for frontend /usr/share/nginx/html
+    path: "{{ APP_LOCATION }}" # for backend /app and for frontend /usr/share/nginx/html
     state: absent
 
 - name: Create a directory for the application # Create a directory for the application and set ownership to the 'expense' user
   ansible.builtin.file:
-    psath: {{ APP_LOCATION }} # for backend /app and for frontend /usr/share/nginx/html
+    psath: "{{ APP_LOCATION }}" # for backend /app and for frontend /usr/share/nginx/html
     state: directory
 
 - name: Download the application code using link # Download the application code from the specified URL and save it to the appropriate directory
   ansible.builtin.unarchive:
     url: "{{ APP_DOWNLOAD_URL }}" # for backend https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip and for frontend https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
-    dest: {{ APP_LOCATION }} # for backend /app and for frontend /usr/share/nginx/html
+    dest: "{{ APP_LOCATION }}" # for backend /app and for frontend /usr/share/nginx/html
     remote_src: yes
